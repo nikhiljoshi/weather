@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <dimen name="zero">0dp</dimen>
+    <dimen name="margin_small">8dp</dimen>
+    <dimen name="margin_tiny">4dp</dimen>
+    <dimen name="margin_normal">16dp</dimen>
+    <dimen name="margin_large">24dp</dimen>
+    <dimen name="margin_xlarge">32dp</dimen>
+    <dimen name="search_elevation">20dp</dimen>
+    <dimen name="font_size_normal">12sp</dimen>
+    <dimen name="font_size_small">8sp</dimen>
+    <dimen name="font_size">16sp</dimen>
+
+    <dimen name="fontd">18sp</dimen>
+</resources>
