@@ -1,9 +1,12 @@
 package com.nikhil.test.ui.main
 
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
+import androidx.appcompat.widget.SearchView
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -14,6 +17,7 @@ import com.nikhil.test.ui.adapter.WeatherInfoListAdapter
 import com.nikhil.test.utils.EventObserver
 import com.nikhil.test.viewmodel.WeatherViewModel
 import dagger.hilt.android.AndroidEntryPoint
+import timber.log.Timber
 import javax.inject.Inject
 
 
@@ -48,11 +52,11 @@ class MainFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         requireActivity().setTitle(R.string.app_name)
-        setupAdapter()
+        setUI()
         setupData()
     }
 
-    private fun setupAdapter() {
+    private fun setUI() {
         binding.swipeContainer.setOnRefreshListener {
             binding.swipeContainer.setRefreshing(false);
         }
@@ -67,6 +71,29 @@ class MainFragment : Fragment() {
         binding.resultsRecyclerView.setHasFixedSize(true)
         binding.resultsRecyclerView.layoutManager = LinearLayoutManager(requireContext())
         binding.resultsRecyclerView.adapter = weatherInfoListAdapter
+
+
+
+        binding.searchView.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
+            override fun onQueryTextSubmit(query: String?): Boolean {
+
+                //clear the focus so that keyBoard won't pop-up upon service call results
+                binding.searchView.clearFocus()
+                query?.let {
+                    Timber.e(query)
+                    weatherListViewModel.getWeather(query)
+                }
+
+                return true
+            }
+
+
+
+            override fun onQueryTextChange(newText: String?): Boolean {
+                return false
+            }
+
+        })
     }
 
 

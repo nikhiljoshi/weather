@@ -6,7 +6,7 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
 import com.nikhil.test.R
 import com.nikhil.test.data.local.DatabaseHelperImpl
-import com.nikhil.test.data.local.entity.AlbumEntity
+import com.nikhil.test.data.local.entity.FavCityEntity
 import com.nikhil.test.dataprovider.remote.network.RemoteDataProviderImpl
 import com.nikhil.test.models.CityWeather
 import com.nikhil.test.utils.Constants
@@ -25,23 +25,15 @@ class WeatherViewModel @Inject constructor(application: Application, private val
     val message: MutableLiveData<Event<Int>> = MutableLiveData()
 
 
-    init{
+    fun getWeather(cityName:String){
         viewModelScope.launch {
             try {
-                if (Util.isNetworkAvailable(application.applicationContext)) {
-                    Timber.d("fetchFromRemote")
-                    fetchFromRemote()
 
-                }
-//                }else
-//                {
-//                    Timber.d("fetchFromDB")
-//                    if (!databaseHelperImpl.getAlbumList().isEmpty()) {
-//                        fetchFromDB()
-//                    }
-//                    else  message.postValue(Event(R.string.list_error_message))
-//
-//                }
+                Timber.d("fetchFromRemote")
+                fetchFromRemote(cityName)
+
+
+
             }catch (e:Exception){
                 Timber.e(e.toString())
                 message.postValue(Event(R.string.list_error_message))
@@ -52,29 +44,16 @@ class WeatherViewModel @Inject constructor(application: Application, private val
 
 
 
-    private suspend fun fetchFromRemote() {
-        val resultFromApi = getWeatherFromRemote()
+    private suspend fun fetchFromRemote(cityName:String) {
+        val resultFromApi = getWeatherFromRemote(cityName)
         weatherMutableLiveData.value = resultFromApi
         Timber.d("resultFromApi"+resultFromApi.toString())
-        //val albumsToInsertInDB = mutableListOf<AlbumEntity>()
-
-//        resultFromApi.forEach { result ->
-//            val albums = AlbumEntity(
-//                result.id,
-//                result.userId,
-//                result.title
-//            )
-//            albumsToInsertInDB.add(albums)
-//        }
-//        databaseHelperImpl.insertAll(albumsToInsertInDB)
     }
 
-    suspend fun getWeatherFromRemote(): CityWeather {
-        return dataProviderImpl.getCityWeather("LONDON", Constants.API_KEY)
+    suspend fun getWeatherFromRemote(cityName:String): CityWeather {
+        return dataProviderImpl.getCityWeather(cityName, Constants.API_KEY)
     }
 
-    suspend fun getAlbumListDB(): List<AlbumEntity> {
-        return databaseHelperImpl.getAlbumList()
-    }
+
 
 }

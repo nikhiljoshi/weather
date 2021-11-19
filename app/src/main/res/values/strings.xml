@@ -6,4 +6,5 @@
     <string name="temperature">Temperature : </string>
     <string name="weather">Description: </string>
     <string name="list_error_message">Could not load Cityweather</string>
+    <string name="query_hint">Enter City name to Search</string>
 </resources>
