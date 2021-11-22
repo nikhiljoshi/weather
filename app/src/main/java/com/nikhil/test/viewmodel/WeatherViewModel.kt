@@ -23,7 +23,7 @@ class WeatherViewModel @Inject constructor(application: Application, private val
 
     val weatherMutableLiveData: MutableLiveData<CityWeather> = MutableLiveData()
     val message: MutableLiveData<Event<Int>> = MutableLiveData()
-
+    val favCityMutableLiveData: MutableLiveData<List<FavCityEntity>> = MutableLiveData()
 
     fun getWeather(cityName:String){
         viewModelScope.launch {
@@ -54,6 +54,18 @@ class WeatherViewModel @Inject constructor(application: Application, private val
         return dataProviderImpl.getCityWeather(cityName, Constants.API_KEY)
     }
 
+    fun bookmarkLocation(name: String, id:Int) {
+        viewModelScope.launch {
+            val cityInsertInDB = mutableListOf<FavCityEntity>()
+            cityInsertInDB.add(FavCityEntity(name, id))
+            databaseHelperImpl.insertAll(cityInsertInDB)
+        }
+    }
 
+    fun getBookMarks() {
+        viewModelScope.launch {
+         favCityMutableLiveData.value = databaseHelperImpl.getCityList()
+        }
+    }
 
 }

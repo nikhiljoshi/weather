@@ -7,9 +7,8 @@ import com.nikhil.test.models.*
 
 @Entity
 data class FavCityEntity(
-    @PrimaryKey val id: Int,
-    @ColumnInfo(name = "name") val name : String,
-    @ColumnInfo(name = "cityid") val cityid : Int
+     @ColumnInfo(name = "name") val name : String,
+    @PrimaryKey @ColumnInfo(name = "cityid") val cityid : Int
 
 )
 

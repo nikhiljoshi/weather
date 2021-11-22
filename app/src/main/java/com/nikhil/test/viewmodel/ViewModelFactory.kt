@@ -14,7 +14,9 @@ import javax.inject.Inject
 class ViewModelFactory @Inject constructor(application: Application,dataProviderImpl: RemoteDataProviderImpl,
                                            databaseHelperImpl: DatabaseHelperImpl) :
     ViewModelProvider.Factory {
-    override fun <T : ViewModel?> create(modelClass: Class<T>): T {
+
+
+    override fun <T : ViewModel> create(modelClass: Class<T>): T {
         return when {
             modelClass === WeatherViewModel::class -> modelClass as T
             else -> throw IllegalArgumentException("unable to find ViewModel class")

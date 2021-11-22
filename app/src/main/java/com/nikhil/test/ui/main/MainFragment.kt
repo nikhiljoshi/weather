@@ -1,19 +1,14 @@
 package com.nikhil.test.ui.main
 
 import android.os.Bundle
-import android.util.Log
-import android.view.LayoutInflater
-import android.view.View
-import android.view.ViewGroup
-import android.widget.Toast
+import android.view.*
 import androidx.appcompat.widget.SearchView
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
-import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.navigation.fragment.findNavController
 import com.google.android.material.snackbar.Snackbar
 import com.nikhil.test.R
 import com.nikhil.test.databinding.FragmentListMainBinding
-import com.nikhil.test.ui.adapter.WeatherInfoListAdapter
 import com.nikhil.test.utils.EventObserver
 import com.nikhil.test.viewmodel.WeatherViewModel
 import dagger.hilt.android.AndroidEntryPoint
@@ -29,8 +24,6 @@ class MainFragment : Fragment() {
 
     @Inject
     lateinit var weatherListViewModel: WeatherViewModel
-
-    lateinit var weatherInfoListAdapter: WeatherInfoListAdapter
 
     private var fragmentMainBinding: FragmentListMainBinding? = null
 
@@ -60,19 +53,12 @@ class MainFragment : Fragment() {
         binding.swipeContainer.setOnRefreshListener {
             binding.swipeContainer.setRefreshing(false);
         }
-        binding.swipeContainer.setRefreshing(true);
+
         // Configure the refreshing colors
         binding.swipeContainer.setColorSchemeResources(android.R.color.holo_blue_bright,
             android.R.color.holo_green_light,
             android.R.color.holo_orange_light,
             android.R.color.holo_red_light);
-
-        weatherInfoListAdapter = WeatherInfoListAdapter()
-        binding.resultsRecyclerView.setHasFixedSize(true)
-        binding.resultsRecyclerView.layoutManager = LinearLayoutManager(requireContext())
-        binding.resultsRecyclerView.adapter = weatherInfoListAdapter
-
-
 
         binding.searchView.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
             override fun onQueryTextSubmit(query: String?): Boolean {
@@ -82,13 +68,11 @@ class MainFragment : Fragment() {
                 query?.let {
                     Timber.e(query)
                     weatherListViewModel.getWeather(query)
+                    binding.swipeContainer.setRefreshing(true);
                 }
 
                 return true
             }
-
-
-
             override fun onQueryTextChange(newText: String?): Boolean {
                 return false
             }
@@ -108,15 +92,50 @@ class MainFragment : Fragment() {
                 val cityWeather = weatherListViewModel.weatherMutableLiveData.value
                 if (cityWeather != null) {
 
-                    weatherInfoListAdapter.setData(listOf(cityWeather))
+                  //  weatherInfoListAdapter.setData(listOf(cityWeather))
+                    binding.cityLayout.name.text = cityWeather.name
+                    binding.cityLayout.maxMin.text = cityWeather.main.temp.toString()
+                    binding.cityLayout.temp.text = cityWeather.main.temp.toString()
+                    binding.cityLayout.description.text = cityWeather.weather.get(0).description
+                    binding.cityLayout.maxMin.text = cityWeather.main.humidity.toString()
+                    binding.cityLayout.addBookmarkButton.visibility = View.VISIBLE
                     binding.swipeContainer.setRefreshing(false);
                 }
-                weatherInfoListAdapter.notifyDataSetChanged()
             })
+
+        binding.cityLayout.addBookmarkButton.setOnClickListener{
+            val cityWeather = weatherListViewModel.weatherMutableLiveData.value
+
+            if (cityWeather != null) {
+                weatherListViewModel.bookmarkLocation(cityWeather.name,cityWeather.id)
+            }
+            binding.cityLayout.addBookmarkButton.visibility = View.GONE
+            binding.cityLayout.removeBookmarkButton.visibility = View.VISIBLE
+        }
     }
 
     override fun onDestroyView() {
         super.onDestroyView()
         fragmentMainBinding = null
     }
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        setHasOptionsMenu(true);
+    }
+
+
+    override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
+        inflater.inflate(R.menu.options, menu)
+        super.onCreateOptionsMenu(menu!!, inflater)
+    }
+
+
+
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        //Navigation
+        findNavController().navigate(R.id.nav_fav_fragment, arguments)
+        return true
+    }
+
 }

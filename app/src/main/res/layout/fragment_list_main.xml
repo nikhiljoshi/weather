@@ -35,6 +35,10 @@
             android:layout_height="wrap_content"
             android:layout_alignParentStart="true"
             app:layout_constraintTop_toBottomOf="@+id/searchView"
+            android:visibility="gone"
             android:layout_alignParentTop="true" />
+
+        <include layout="@layout/city_layout" android:id="@+id/city_layout"/>
+
     </androidx.constraintlayout.widget.ConstraintLayout>
 </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
