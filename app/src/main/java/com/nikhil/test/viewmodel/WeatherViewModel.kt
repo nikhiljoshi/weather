@@ -55,9 +55,14 @@ class WeatherViewModel @Inject constructor(application: Application, private val
 
     fun bookmarkLocation(name: String, id:Int, temp: Double) {
         viewModelScope.launch {
-            val cityInsertInDB = mutableListOf<FavCityEntity>()
-            cityInsertInDB.add(FavCityEntity(name, id,temp))
-            databaseHelperImpl.insertAll(cityInsertInDB)
+            try {
+                val cityInsertInDB = mutableListOf<FavCityEntity>()
+                cityInsertInDB.add(FavCityEntity(name, id, temp))
+                databaseHelperImpl.insertAll(cityInsertInDB)
+            }catch (e:Exception){
+                Timber.e(e.toString())
+                message.postValue(Event(R.string.bookmark_error_message))
+            }
         }
     }
 

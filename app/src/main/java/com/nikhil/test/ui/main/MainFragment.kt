@@ -92,8 +92,6 @@ class MainFragment : Fragment() {
             Observer {
                 val cityWeather = weatherListViewModel.weatherMutableLiveData.value
                 if (cityWeather != null) {
-
-                  //  weatherInfoListAdapter.setData(listOf(cityWeather))
                     binding.cityLayout.name.text = cityWeather.name
                     binding.cityLayout.maxMin.text = cityWeather.main.temp_min.toInt().toString()
                     binding.cityLayout.temp.text = cityWeather.main.temp.toInt().toString()

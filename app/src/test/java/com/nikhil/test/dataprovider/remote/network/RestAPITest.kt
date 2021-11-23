@@ -1,5 +1,6 @@
 package com.nikhil.test.dataprovider.remote.network
 
+import com.nikhil.test.utils.Constants
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.runBlocking
 import okhttp3.OkHttpClient
@@ -43,6 +44,19 @@ class RestAPITest {
     @After
     fun stopService() {
         mockServer.shutdown()
+    }
+
+    @Test
+    fun getCityWeather_verifyEndpoint() {
+
+        runBlocking {
+            mockServer.enqueueMockResponse("get_weather_success.json", 200)
+            val data = apiService.getCityWeather("LONDON", Constants.API_KEY)
+            val request = mockServer.takeRequest(2000, TimeUnit.MILLISECONDS)
+
+            MatcherAssert.assertThat(request, CoreMatchers.notNullValue())
+
+        }
     }
 
 
