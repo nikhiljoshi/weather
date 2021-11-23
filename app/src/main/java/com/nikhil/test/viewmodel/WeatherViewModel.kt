@@ -11,7 +11,6 @@ import com.nikhil.test.dataprovider.remote.network.RemoteDataProviderImpl
 import com.nikhil.test.models.CityWeather
 import com.nikhil.test.utils.Constants
 import com.nikhil.test.utils.Event
-import com.nikhil.test.utils.Util
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
 import timber.log.Timber
@@ -54,10 +53,10 @@ class WeatherViewModel @Inject constructor(application: Application, private val
         return dataProviderImpl.getCityWeather(cityName, Constants.API_KEY)
     }
 
-    fun bookmarkLocation(name: String, id:Int) {
+    fun bookmarkLocation(name: String, id:Int, temp: Double) {
         viewModelScope.launch {
             val cityInsertInDB = mutableListOf<FavCityEntity>()
-            cityInsertInDB.add(FavCityEntity(name, id))
+            cityInsertInDB.add(FavCityEntity(name, id,temp))
             databaseHelperImpl.insertAll(cityInsertInDB)
         }
     }

@@ -107,7 +107,7 @@ class MainFragment : Fragment() {
             val cityWeather = weatherListViewModel.weatherMutableLiveData.value
 
             if (cityWeather != null) {
-                weatherListViewModel.bookmarkLocation(cityWeather.name,cityWeather.id)
+                weatherListViewModel.bookmarkLocation(cityWeather.name,cityWeather.id,cityWeather.main.temp)
             }
             binding.cityLayout.addBookmarkButton.visibility = View.GONE
             binding.cityLayout.removeBookmarkButton.visibility = View.VISIBLE
