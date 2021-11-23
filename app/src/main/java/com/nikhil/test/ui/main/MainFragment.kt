@@ -94,8 +94,8 @@ class MainFragment : Fragment() {
 
                   //  weatherInfoListAdapter.setData(listOf(cityWeather))
                     binding.cityLayout.name.text = cityWeather.name
-                    binding.cityLayout.maxMin.text = cityWeather.main.temp.toString()
-                    binding.cityLayout.temp.text = cityWeather.main.temp.toString()
+                    binding.cityLayout.maxMin.text = cityWeather.main.temp_min.toInt().toString()
+                    binding.cityLayout.temp.text = cityWeather.main.temp.toInt().toString()
                     binding.cityLayout.description.text = cityWeather.weather.get(0).description
                     binding.cityLayout.maxMin.text = cityWeather.main.humidity.toString()
                     binding.cityLayout.addBookmarkButton.visibility = View.VISIBLE

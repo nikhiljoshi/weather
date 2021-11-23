@@ -46,7 +46,7 @@ class FavCityListAdapter() : RecyclerView.Adapter<FavCityListAdapter.CityViewHol
 
         fun bindData(cityWeather: FavCityEntity) {
             (itemView.context.getString(R.string.cityName) +  cityWeather.name).also { cityname.text = it }
-            (itemView.context.getString(R.string.temperature) +  cityWeather.temp).also { temperature.text = it }
+            (itemView.context.getString(R.string.temperature) +  cityWeather.temp.toInt()).also { temperature.text = it }
         }
     }
 

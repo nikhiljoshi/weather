@@ -13,6 +13,7 @@ interface RestAPI {
 
     @GET("weather")
     suspend fun getCityWeather(@Query("q") cityname: String?,
-                               @Query("appid") apikey: String?): CityWeather
+                               @Query("appid") apikey: String?,
+                               @Query("units") units: String ="metric"): CityWeather
 
 }
