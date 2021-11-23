@@ -68,6 +68,7 @@ class MainFragment : Fragment() {
                 query?.let {
                     Timber.e(query)
                     weatherListViewModel.getWeather(query)
+                    binding.cityLayout.cityBottomSheetLayout.visibility = View.VISIBLE
                     binding.swipeContainer.setRefreshing(true);
                 }
 
