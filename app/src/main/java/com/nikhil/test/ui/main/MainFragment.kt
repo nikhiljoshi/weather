@@ -10,6 +10,7 @@ import com.google.android.material.snackbar.Snackbar
 import com.nikhil.test.R
 import com.nikhil.test.databinding.FragmentListMainBinding
 import com.nikhil.test.utils.EventObserver
+import com.nikhil.test.utils.Util
 import com.nikhil.test.viewmodel.WeatherViewModel
 import dagger.hilt.android.AndroidEntryPoint
 import timber.log.Timber
@@ -45,8 +46,14 @@ class MainFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         requireActivity().setTitle(R.string.app_name)
-        setUI()
-        setupData()
+        if(Util.isNetworkAvailable(activity))
+        {
+            setUI()
+            setupData()
+        }
+        else
+            showFailedView(true)
+
     }
 
     private fun setUI() {
@@ -136,5 +143,21 @@ class MainFragment : Fragment() {
         findNavController().navigate(R.id.nav_fav_fragment, arguments)
         return true
     }
+
+
+    private fun showFailedView(status:Boolean) {
+        binding.progressBar.visibility=View.GONE
+
+        if(status)
+        {
+                binding.animFailed.visibility=View.GONE
+                binding.animNetwork.visibility=View.VISIBLE
+            }
+            else{
+                binding.animNetwork.visibility=View.GONE
+                binding.animFailed.visibility=View.VISIBLE
+            }
+        }
+
 
 }
